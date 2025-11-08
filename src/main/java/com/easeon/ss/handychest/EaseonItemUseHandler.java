@@ -1,6 +1,5 @@
 package com.easeon.ss.handychest;
 
-import com.easeon.ss.core.game.EaseonSound;
 import com.easeon.ss.core.wrapper.EaseonPlayer;
 import com.easeon.ss.core.wrapper.EaseonWorld;
 import net.minecraft.component.DataComponentTypes;
@@ -38,7 +37,7 @@ public class EaseonItemUseHandler {
                         public void onClosed(PlayerEntity player) {
                             super.onClosed(player);
                             enderChest.onClose(player);
-                            EaseonSound.play(player, SoundEvents.BLOCK_ENDER_CHEST_CLOSE);
+                            world.playSound(player.getEntityPos(), SoundEvents.BLOCK_ENDER_CHEST_CLOSE, SoundCategory.BLOCKS, 1.0f);
                         }
                     };
                 }, item.getName()
@@ -46,9 +45,10 @@ public class EaseonItemUseHandler {
 
             player.incrementStat(Stats.OPEN_ENDERCHEST);
             player.swingHand(hand);
-            world.playSound(player, SoundEvents.BLOCK_ENDER_CHEST_OPEN, SoundCategory.BLOCKS, 0.5f);
+            world.playSound(player.getPos(), SoundEvents.BLOCK_ENDER_CHEST_OPEN, SoundCategory.BLOCKS, 0.5f);
 
             return ActionResult.SUCCESS;
+
         } else if (item.isIn(ItemTags.SHULKER_BOXES)) {
             var inventory = getShulkerBoxInventory(item.get());
             player.openHandledScreen(new SimpleNamedScreenHandlerFactory((syncId, inv, p) ->
@@ -56,7 +56,7 @@ public class EaseonItemUseHandler {
                     @Override
                     public void onClosed(PlayerEntity player) {
                         super.onClosed(player);
-                        EaseonSound.play(player, SoundEvents.BLOCK_SHULKER_BOX_CLOSE);
+                        world.playSound(player.getEntityPos(), SoundEvents.BLOCK_SHULKER_BOX_CLOSE, SoundCategory.BLOCKS, 1.0f);
                         saveShulkerBoxInventory(item.get(), inventory);
                     }
                 },
@@ -65,7 +65,7 @@ public class EaseonItemUseHandler {
 
             player.incrementStat(Stats.OPEN_SHULKER_BOX);
             player.swingHand(hand);
-            world.playSound(player, SoundEvents.BLOCK_SHULKER_BOX_OPEN, SoundCategory.BLOCKS, 0.5f);
+            world.playSound(player.getPos(), SoundEvents.BLOCK_SHULKER_BOX_OPEN, SoundCategory.BLOCKS, 0.5f);
 
             return ActionResult.SUCCESS;
         }
