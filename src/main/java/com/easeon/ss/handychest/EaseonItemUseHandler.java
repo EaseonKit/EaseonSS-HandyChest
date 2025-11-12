@@ -12,18 +12,14 @@ import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.screen.GenericContainerScreenHandler;
 import net.minecraft.screen.ShulkerBoxScreenHandler;
 import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.world.World;
 
 public class EaseonItemUseHandler {
-    public static ActionResult onUseItem(ServerPlayerEntity mcPlayer, World mcWorld, Hand hand) {
-        var world = new EaseonWorld(mcWorld);
-        var player = new EaseonPlayer(mcPlayer);
+    public static ActionResult onUseItem(EaseonWorld world, EaseonPlayer player, Hand hand) {
         var item = player.getStackInHand(hand);
 
         if (item.of(Items.ENDER_CHEST)) {

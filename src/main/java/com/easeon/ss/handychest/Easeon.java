@@ -17,10 +17,10 @@ public class Easeon extends BaseToggleModule implements ModInitializer {
 
     public void updateTask() {
         if (config.enabled && task == null) {
-            task = EaseonItemUse.register(EventPhase.BEFORE, EaseonItemUseHandler::onUseItem);
+            task = EaseonItemUse.on(EventPhase.BEFORE, EaseonItemUseHandler::onUseItem);
         }
         if (!config.enabled && task != null) {
-            EaseonItemUse.unregister(task);
+            EaseonItemUse.off(task);
             task = null;
         }
     }
