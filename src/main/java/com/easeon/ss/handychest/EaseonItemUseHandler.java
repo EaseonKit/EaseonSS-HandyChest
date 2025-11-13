@@ -1,12 +1,9 @@
 package com.easeon.ss.handychest;
 
+import com.easeon.ss.core.helper.ItemHelper;
 import com.easeon.ss.core.wrapper.EaseonPlayer;
 import com.easeon.ss.core.wrapper.EaseonWorld;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.ContainerComponent;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.screen.GenericContainerScreenHandler;
@@ -46,14 +43,14 @@ public class EaseonItemUseHandler {
             return ActionResult.SUCCESS;
 
         } else if (item.isIn(ItemTags.SHULKER_BOXES)) {
-            var inventory = getShulkerBoxInventory(item.get());
+            var inventory = ItemHelper.getShulkerBoxInventory(item);
             player.openHandledScreen(new SimpleNamedScreenHandlerFactory((syncId, inv, p) ->
                 new ShulkerBoxScreenHandler(syncId, inv, inventory) {
                     @Override
                     public void onClosed(PlayerEntity player) {
                         super.onClosed(player);
                         world.playSound(player.getEntityPos(), SoundEvents.BLOCK_SHULKER_BOX_CLOSE, SoundCategory.BLOCKS, 1.0f);
-                        saveShulkerBoxInventory(item.get(), inventory);
+                        ItemHelper.saveShulkerBoxInventory(item, inventory);
                     }
                 },
                 item.getName()
@@ -67,22 +64,5 @@ public class EaseonItemUseHandler {
         }
 
         return ActionResult.PASS;
-    }
-
-    private static SimpleInventory getShulkerBoxInventory(ItemStack stack) {
-        ContainerComponent container = stack.getOrDefault(DataComponentTypes.CONTAINER, ContainerComponent.DEFAULT);
-        SimpleInventory inventory = new SimpleInventory(27);
-        container.copyTo(inventory.getHeldStacks());
-        return inventory;
-    }
-
-    private static void saveShulkerBoxInventory(ItemStack stack, SimpleInventory inventory) {
-        java.util.List<ItemStack> items = new java.util.ArrayList<>();
-        for (int i = 0; i < inventory.size(); i++) {
-            ItemStack slotStack = inventory.getStack(i);
-            // 빈 슬롯도 포함 (isEmpty 체크 제거)
-            items.add(slotStack.copy());
-        }
-        stack.set(DataComponentTypes.CONTAINER, ContainerComponent.fromStacks(items));
     }
 }
